@@ -1,0 +1,60 @@
+1. Monitor a log file , detect a pattern , send an email on detection 
+
+Solution :
+
+Script 1 :-
+$ vi kernelerror.sh
+
+#!/bin/bash
+n1=`awk '/ERROR/{n++}END{print n}' /var/log/messages`
+[ $n1 -ge 1 ] && mailx -s "error found in /var/log/messages" username@testing.com
+>my.log
+
+Scheduling a cronjob that runs every 5 minutes
+
+*/5 * * * * monitor.sh
+
+Script 2 :-
+
+$ vi monitor.sh
+
+#!/bin/bash
+n1=`awk '/file not found/{n++}END{print n}' monitor.log`
+[ $n1 -ge 1 ] && mailx  -s "error found" username@testing.com
+>my.log
+
+
+*/5 * * * * monitor.sh
+
+Output : 
+
+root@C02ZQ02XMD6M Desktop # vi monitor.log
+root@C02ZQ02XMD6M Desktop # vi monitor.sh       
+root@C02ZQ02XMD6M Desktop # ./monitor.sh 
+
+via Terminal : 
+
+tail -f /var/log/messages | grep -i "error" | mail -s "error found" username@testing.com
+
+#####################################
+
+2. Monitor process particular process on an instance , send an email on incase of state change like process got stopped , taking more CPU that threshold 
+
+Solution :
+
+#!/bin/bash
+threshold_value=75
+ps cax | grep docker > /dev/null
+if [ $? -eq 0 ]; then
+  echo "Process is running."
+  ps -eo pid,ppid,cmd,%cpu --sort=-%cpu > cpu_load.txt
+  load=`cat cpu_load.txt  | grep -i docker | awk '{print $6}'`
+  if [ $load > $threshold_value ] ;then
+  #echo "LOAD IS HIGH"
+  mailx -s "Load is Higher on Service Docker " -c "cc@user" "to@user" < emailbody
+  fi
+else
+  echo "Process is not running."
+  mailx -s "Process is not running " -c "cc@user" "to@user" < emailbody
+fi
+
