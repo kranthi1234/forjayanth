@@ -1,0 +1,27 @@
+Security :
+
+1. Show how to block ports 
+
+Solution : 
+
+iptables -A INPUT -p tcp --destination-port [port number] -j DROP
+
+2. Show how to setup port forwarding 
+
+Solution :
+
+LINUX 
+
+ssh admin@server1.example.com -L 8080: server1.example.com:3000
+
+IP Tables :
+
+iptables -t nat -A PREROUTING -p tcp -d <IP> --dport 8080 -j DNAT --to-destination <IP>:80
+
+DOCKER :
+
+docker run -p 8000:8000 -it --entrypoint=bash python:3.7-slim
+
+Kubernetes :
+
+kubectl port-forward podname 8080:8080
