@@ -1,0 +1,56 @@
+GIT COMMANDS :
+
+1. How do you set up a script to run every time a repository receives new commits through push ?
+
+Solution:
+
+This can be achieved via Git hooks. Whenever we initialize a new repository with git init, Git populates the hooks directory 
+
+Folder location : .git/hooks
+
+We can define pre-receive, update, or a post-receive hook depending on when exactly the script needs to be triggered.
+
+Pre-receive hook : Any script bound to this hook will be executed before any references are updated.
+
+Update hook : It is called once for every commit that has been pushed to the destination repository.
+
+Post-receive hook in the repository is invoked after the updates have been accepted into the destination repository. 
+
+Hooks are local to every Git repository and are not versioned.
+
+vim .git/hooks/pre-push # then add your code and save the file
+                        # Also put the shebang on top to identify the interpreter
+chmod +x .git/hooks/pre-push # make it executable
+
+Example Script : We had this scenario where Users where pushing their Code from their Master branch to avoid this we came up with the below approach (We use Bitbucket as our version control system) 
+
+#!/bin/bash
+
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+
+if [ 'master' = ${current_branch} ]
+then
+  echo "ERROR: Cannot push to master. Switch to a different branch and create a pull request."
+  exit 1 # push will not execute
+else
+  exit 0 # push will execute
+fi
+
+#########################################################################
+
+2. How do you find a list of files that have changed in a particular commit ?
+
+Solution: It can be achieved in a different ways via
+
+git diff --name-only HEAD HEAD~1
+
+git log --stat
+
+git diff
+
+git status
+
+git log (commit ID's will be displayed)
+
+git show --name-only {commit}
+
