@@ -23,7 +23,7 @@ n1=`awk '/file not found/{n++}END{print n}' monitor.log`
 [ $n1 -ge 1 ] && mailx  -s "error found" username@testing.com
 >my.log
 
-
+Scheduling a cronjob
 */5 * * * * monitor.sh
 
 Output : 
