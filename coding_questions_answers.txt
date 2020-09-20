@@ -1,0 +1,47 @@
+CODE :
+
+1. Write a short program that prints numbers from 1 to 100 on a new line 
+
+Code :
+#!/usr/bin/env python
+for i in range(101):
+        print(i)
+
+For each multiple of 3 , print "AVA" instead of Number 
+
+Code :
+
+#!/usr/bin/env python
+for i in range(101):
+        if i % 3 == 0:
+           print("AVA")
+        else:
+           print(i)
+
+For each multiple of 5 , print "AMO" instead of number 
+
+Code :
+
+#!/usr/bin/env python
+i=0
+while (i <=100 ):
+      if i % 5 == 0:
+           print "AMO"
+      else:
+           print(i)
+      i+=1
+
+
+For numbers which are multiples of 3 and 5 , print "AVAAMO" instead of number 
+
+Code :
+
+#!/usr/bin/env python
+for i in range(101):
+        if i % 3 == 0 and i % 5 == 0:
+                print "AVAAMO"
+        else:
+                print(i)
+
+
+Any Programming language can be used 
