@@ -1,0 +1,61 @@
+Docker :
+
+1. Create a sample docker container with a Node.js . Express app and demonstrate the installation
+	Guidelines 
+	. You should be able to find what system packages are needed looking through the app 
+	. You should not need to change the app code in any way
+	. The app should be running as a non-privileged user
+	. The app should be automatically restarted if crashes or is killed
+	. The app should maximize all of the available CPU's
+	. Timezone should in IST
+	. Follow best practices when writing a docker file 
+
+Solution : usermod -aG docker <username> (Adding the user to Docker group)
+
+Dockerfile:
+
+FROM node:12.18.1
+WORKDIR /app
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+RUN npm install
+COPY . .
+CMD [ "node", "server.js" ]
+
+*****************************************
+
+docker build --tag node-docker .
+
+**************************************
+
+OR 
+
+FROM node:14
+ENV TZ=Asia/Kolkata
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+WORKDIR /usr/src/app
+COPY package*.json app.js ./
+RUN npm install
+EXPOSE 3000
+CMD ["node", "app.js"]
+
+
+app.js file 
+
+const express = require('express')
+const app = express()
+
+app.get('/', (req, res) => res.send('Hello World!'))
+app.listen(3000, () => console.log('Server ready'))
+
+
+package.json
+
+npm init -y
+npm install express
+
+
+While running the container, see availble CPU's using nproc and see how many are free, based on that we can allocate the CPU's 
+
+docker run --cpuset-cpus="0-2" myapp:latest
+
