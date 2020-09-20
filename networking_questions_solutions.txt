@@ -1,0 +1,28 @@
+Network :
+
+1. Show list of process using network 
+
+netstat -tunlp | grep httpd 
+
+or iptraf package can be installed 
+
+2.Show list of IP's a process is connected to
+
+lsof -nPi @192.168.1.123:443
+
+or 
+
+fuser -n tcp ,192.168.1.123,443
+fuser -n udp ,192.168.1.123,443
+
+or
+
+ss -antp
+
+3. Show how to list open files and kill processes tied to a user 
+
+lsof -u <username> 
+
+and can kill using kill -9 
+
+kill -9 `lsof -u root | awk '{print $2}'`  => CORRECT 
